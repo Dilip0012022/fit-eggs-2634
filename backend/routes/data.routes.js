@@ -5,10 +5,10 @@ const {auth}=require("./middlewares/auth")
 
 
 dataRouter.use(auth)
-DataModel.post("/", async (req, res) => {
+dataRouter.post("/", async (req, res) => {
   try {
-    const { type, name, color, size, price } = req.body;
-    const data = new DataModel({ type, name, color, size, price });
+    const { id,img1,img2,desc,category,price,size,color} = req.body;
+    const data = new DataModel({id,img1,img2,desc,category,price,size,color});
     await data.save();
     return res.status(201).json(data);
   } catch (error) {
@@ -17,7 +17,7 @@ DataModel.post("/", async (req, res) => {
   }
 });
 
-DataModel.get("/", async (req, res) => {
+dataRouter.get("/", async (req, res) => {
   try {
     const data = await DataModel.find();
     return res.json(data);
@@ -27,7 +27,7 @@ DataModel.get("/", async (req, res) => {
   }
 });
 
-DataModel.get("/:id", async (req, res) => {
+dataRouter.get("/:id", async (req, res) => {
   try {
     const data = await DataModel.findById(req.params.id);
     if (!data) {
@@ -39,7 +39,7 @@ DataModel.get("/:id", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-DataModel.put("/:id", async (req, res) => {
+dataRouter.put("/:id", async (req, res) => {
   try {
     const { type, name, color, size, price } = req.body;
     const data = await DataModel.findByIdAndUpdate(
@@ -56,7 +56,7 @@ DataModel.put("/:id", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-DataModel.delete("/:id", async (req, res) => {
+dataRouter.delete("/:id", async (req, res) => {
   try {
     const data = await DataModel.findByIdAndDelete(req.params.id);
     if (!data) {
@@ -68,7 +68,7 @@ DataModel.delete("/:id", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-DataModel.get("/sort/price", async (req, res) => {
+dataRouter.get("/sort/price", async (req, res) => {
   try {
     const data = await DataModel.find().sort({ price: 1 });
     return res.json(data);
@@ -77,7 +77,7 @@ DataModel.get("/sort/price", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-DataModel.get("/filter/color/:color", async (req, res) => {
+dataRouter.get("/filter/color/:color", async (req, res) => {
   try {
     const data = await DataModel.find({ color: req.params.color });
     return res.json(data);
